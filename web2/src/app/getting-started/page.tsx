@@ -1,3 +1,5 @@
+import { atlasGuideUrl, sourceUrl } from "@/lib/atlas-article";
+import { getAtlas } from "@/lib/yaml";
 import { Card } from "@heroui/react";
 import type { Metadata } from "next";
 import { CodeBlock } from "@/components/code-block";
@@ -11,7 +13,11 @@ export const metadata: Metadata = {
     "A guide for getting started with Physlib, aimed at people with no Lean experience or who are new to the project.",
 };
 
-export default function GettingStartedPage() {
+export default async function GettingStartedPage() {
+  const atlas = await getAtlas();
+  const firstArticleUrl = atlas.firstContributionFile
+    ? sourceUrl(atlas.repo, atlas.commit, atlas.firstContributionFile)
+    : atlasGuideUrl(atlas);
   return (
     <div className="mx-auto w-full max-w-4xl px-5 sm:px-8 py-12 md:py-16">
 
@@ -39,8 +45,8 @@ export default function GettingStartedPage() {
         before signing in to GitHub.
       </p>
       <div className="mb-12 flex flex-wrap gap-3">
-        <ButtonLink href="https://github.com/leanprover-community/physlib/blob/master/docs/GettingStarted/FirstAPIMap.md">
-          Write your first Atlas article
+        <ButtonLink href={firstArticleUrl}>
+          {atlas.firstContributionFile ? "Write your first Atlas article" : "Atlas writing guide"}
         </ButtonLink>
         <ButtonLink href="/gh-guide" variant="secondary">
           Fork and open a pull request

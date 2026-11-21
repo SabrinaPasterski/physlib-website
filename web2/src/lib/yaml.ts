@@ -172,6 +172,8 @@ export type Atlas = {
   commit: string;
   /** Guide filename at the snapshot revision; absent in older cached data. */
   guideFile?: string;
+  /** Beginner walkthrough when it exists and matches the indexed article format. */
+  firstContributionFile?: string;
   generatedAt: string;
   nodes: AtlasNode[];
   directories: AtlasDirectory[];

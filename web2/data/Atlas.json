@@ -3,7 +3,8 @@
   "branch": "master",
   "commit": "56430c65b76f73c7c25fc03eed46be1d888520bb",
   "guideFile": "docs/API_MAP_GUIDE.md",
-  "generatedAt": "2026-11-21T21:15:11.101Z",
+  "firstContributionFile": "docs/GettingStarted/FirstAPIMap.md",
+  "generatedAt": "2026-11-21T21:18:23.945Z",
   "nodes": [
     {
       "path": "Physlib/ClassicalFieldTheory/GaugeTheory",
