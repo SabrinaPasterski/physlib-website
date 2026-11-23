@@ -26,6 +26,12 @@ export const metadata: Metadata = {
     template: `%s · ${site.name}`,
   },
   description: site.description,
+  icons: {
+    icon: [
+      { url: "/icon.svg?v=mono", type: "image/svg+xml", sizes: "any", media: "(prefers-color-scheme: light)" },
+      { url: "/physlib-icon-dark.svg?v=mono", type: "image/svg+xml", sizes: "any", media: "(prefers-color-scheme: dark)" },
+    ],
+  },
   openGraph: {
     title: site.title,
     description: site.description,
