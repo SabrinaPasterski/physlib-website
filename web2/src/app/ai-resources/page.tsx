@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/page-header";
+import { site } from "@/lib/site";
 import { AiGuidelinesContent } from "../ai-guidelines/content";
 import { PhyslibAiToolsContent } from "../physlib-ai-tools/content";
 import { PromptsContent } from "../prompts/content";
@@ -26,6 +27,21 @@ export default function AiResourcesPage() {
         <section>
           <PageHeader id="ai-guidelines" title="AI Guidelines" />
           <AiGuidelinesContent headingLevel={3} />
+        </section>
+        <section>
+          <PageHeader id="task-discovery" title="Find a task with an AI assistant" />
+          <div className="max-w-2xl space-y-3 text-sm leading-relaxed text-foreground/90">
+            <p>
+              Add <code className="break-all">{site.url}/api/mcp</code> to your MCP client as a remote
+              server using Streamable HTTP. For a local preview, use its address with the same{" "}
+              <code>/api/mcp</code> path.
+            </p>
+            <p>
+              Try “Find a documentation task and show me how to contribute.” Your client can read
+              the contribution guides as MCP resources or request one with <code>get_contribution_guide</code>.
+              For a script, fetch the <a href="/api/tasks" className="text-accent hover:underline underline-offset-2">task list as JSON</a>.
+            </p>
+          </div>
         </section>
         <section>
           <PageHeader id="physlib-ai-tools" title="Physlib AI Tools" />

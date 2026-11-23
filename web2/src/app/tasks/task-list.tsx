@@ -4,7 +4,8 @@ import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import type { FindTask, FindTaskKind } from "@/lib/find-tasks";
 import { site, todoTaskHref } from "@/lib/site";
-import { getItemType, itemTypes, TodoItemCard } from "../todo/todo-client";
+import { TodoItemCard } from "../todo/todo-client";
+import { filterTaskSearch } from "@/lib/task-search";
 import { todoSubfield } from "../todo/todo-subfield";
 
 const filters = [
@@ -103,12 +104,14 @@ export function TaskList({
   tasks,
   issuesAvailable,
   documentationAvailable,
+  leanTodosAvailable,
   initialType,
   initialQuery,
 }: {
   tasks: FindTask[];
   issuesAvailable: boolean;
   documentationAvailable: boolean;
+  leanTodosAvailable: boolean;
   initialType?: string;
   initialQuery?: string;
 }) {
@@ -124,13 +127,7 @@ export function TaskList({
     tabTasks.map(taskSubfield).filter((name): name is string => Boolean(name)),
   )).sort((a, b) => a.localeCompare(b, "en"));
 
-  const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
-  const matchingSearch = tasks.filter((task) => {
-    const kind = task.todoItem ? getItemType(task.todoItem) : null;
-    const text = [task.title, task.detail, task.source, task.keywords, kind && itemTypes[kind].label]
-      .join(" ").toLowerCase();
-    return words.every((word) => text.includes(word));
-  });
+  const matchingSearch = filterTaskSearch(tasks, query);
 
   const results = matchingSearch.filter((task) => {
     if (!task.kinds.includes(type)) return false;
@@ -164,7 +161,7 @@ export function TaskList({
             onClick={() => updateFilters(key, query)}
             className="rounded-(--radius) border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:border-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-pressed:border-accent aria-pressed:bg-(--accent-tint) aria-pressed:text-accent"
           >
-            {label}{words.length > 0 && (
+            {label}{query.trim().length > 0 && (
               <span className="ml-1.5 text-foreground/65">
                 {key === type ? results.length : matchingSearch.filter((task) => task.kinds.includes(key)).length}
               </span>
@@ -228,9 +225,10 @@ export function TaskList({
         </div>
       </div>
 
-      {(!issuesAvailable || !documentationAvailable) && (
+      {(!issuesAvailable || !documentationAvailable || !leanTodosAvailable) && (
         <p className="mb-4 rounded-(--radius) border border-border px-3 py-2 text-sm text-foreground/75">
           {!issuesAvailable && "GitHub issues may be incomplete. "}
+          {!leanTodosAvailable && "Lean TODOs are temporarily unavailable. "}
           {!documentationAvailable && "The documentation list is temporarily unavailable."}
         </p>
       )}

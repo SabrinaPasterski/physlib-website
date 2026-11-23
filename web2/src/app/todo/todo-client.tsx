@@ -5,52 +5,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { site } from "@/lib/site";
 import type { TodoData, TodoItem } from "@/lib/yaml";
+import { getItemType, itemTypes, type ItemType } from "@/lib/task-search";
 import { todoSubfield } from "./todo-subfield";
 
-export const itemTypes = {
-  informalDef: {
-    label: "Informal Definition",
-    className: "bg-(--accent-tint) text-accent border-accent/20",
-    tagPrefix: "informal_def",
-  },
-  informalLemma: {
-    label: "Informal Lemma",
-    className: "bg-orange-500/10 text-orange-600 border-orange-500/20 dark:text-orange-400",
-    tagPrefix: "informal_lemma",
-  },
-  semiformal: {
-    label: "Semiformal Result",
-    className: "bg-(--accent-tint) text-accent border-accent/20",
-    tagPrefix: "semiformal_result",
-  },
-  sorryful: {
-    label: "Sorryful Result",
-    className: "bg-purple-500/10 text-purple-700 border-purple-500/20 dark:text-purple-400",
-    tagPrefix: "sorryful result",
-  },
-  todo: {
-    label: "TODO Item",
-    className: "bg-teal-500/10 text-teal-700 border-teal-500/20 dark:text-teal-400",
-    tagPrefix: "TODO",
-  },
-  githubIssue: {
-    label: "GitHub Issue",
-    className: "bg-green-500/10 text-green-700 border-green-500/20 dark:text-green-400",
-  },
-};
-
-export type ItemType = keyof typeof itemTypes;
 type FilterType = "all" | ItemType;
 const filterOptions: FilterType[] = ["all", ...(Object.keys(itemTypes) as ItemType[])];
-
-export function getItemType(item: TodoItem): ItemType {
-  if (item.isGitHubIssue) return "githubIssue";
-  if (item.isInformalDef) return "informalDef";
-  if (item.isInformalLemma) return "informalLemma";
-  if (item.isSemiFormalResult) return "semiformal";
-  if (item.isSorryfulResult) return "sorryful";
-  return "todo";
-}
 
 function copyTagText(item: TodoItem, type: ItemType, tagHref: string): string {
   if (type === "githubIssue") return `[GitHub Issue: ${item.name}](${item.githubLink})`;
