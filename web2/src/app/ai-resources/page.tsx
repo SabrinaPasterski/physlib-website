@@ -16,7 +16,7 @@ export default function AiResourcesPage() {
     <div className="page-frame-editorial max-w-5xl">
       <p className="label-mono text-muted mb-5">Learn</p>
       <h1 className="page-title-editorial">AI Resources</h1>
-      <p className="page-intro-editorial mb-8 max-w-2xl">
+      <p className="page-intro-editorial max-w-2xl mb-10">
         Read Physlib’s AI contribution guidelines and browse the tools and prompts below.
         When you’re ready to submit a change, use the{" "}
         <Link href="/gh-guide#make-a-pull-request" className="text-accent hover:underline underline-offset-2">
@@ -29,7 +29,7 @@ export default function AiResourcesPage() {
           <AiGuidelinesContent headingLevel={3} />
         </section>
         <section>
-          <PageHeader id="task-discovery" title="Find a task with an AI assistant" />
+          <PageHeader id="task-discovery" title="Find a Task with an AI Assistant" />
           <div className="max-w-2xl space-y-3 text-sm leading-relaxed text-foreground/90">
             <p>
               Add <code className="break-all">{site.url}/api/mcp</code> to your MCP client as a remote
@@ -52,6 +52,7 @@ export default function AiResourcesPage() {
           <PromptsContent headingLevel={3} />
         </section>
       </div>
+
     </div>
   );
 }

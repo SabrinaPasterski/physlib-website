@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, type ReactNode } from "react";
+import { Chevron } from "@/components/chevron";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { site } from "@/lib/site";
@@ -42,11 +43,13 @@ export function TodoItemCard({
   tagHref = `#${item.tag}`,
   linkedIssue,
   compactLabels = false,
+  children,
 }: {
   item: TodoItem;
   tagHref?: string;
   linkedIssue?: { href: string; label: string; assignees?: string[] };
   compactLabels?: boolean;
+  children?: ReactNode;
 }) {
   const type = getItemType(item);
   const { line, endLine } = item;
@@ -120,6 +123,7 @@ export function TodoItemCard({
           </span>
         )}
       </div>
+      {children}
     </div>
   );
 }
@@ -236,13 +240,11 @@ export function TodoClient({ data }: { data: TodoData }) {
                   className="flex w-full items-center gap-2 text-left focus-visible:outline-2 focus-visible:outline-accent"
                 >
                   {name}
-                  <span className="text-xs font-normal text-muted border border-border rounded-full px-2 py-0.5">
+                  <span className="site-tag site-tag-neutral font-normal tabular-nums">
                     {items.length}
                   </span>
                   {!searching && (
-                    <span aria-hidden="true" className="ml-auto text-muted text-sm">
-                      {isOpen ? "▲" : "▼"}
-                    </span>
+                    <Chevron open={isOpen} className="ml-auto text-muted" />
                   )}
                 </button>
               </h2>

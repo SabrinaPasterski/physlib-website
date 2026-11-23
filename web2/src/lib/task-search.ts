@@ -4,32 +4,32 @@ import type { TodoItem } from "@/lib/yaml";
 export const itemTypes = {
   informalDef: {
     label: "Informal Definition",
-    className: "bg-(--accent-tint) text-accent border-accent/20",
+    className: "site-tag-accent",
     tagPrefix: "informal_def",
   },
   informalLemma: {
     label: "Informal Lemma",
-    className: "bg-orange-500/10 text-orange-600 border-orange-500/20 dark:text-orange-400",
+    className: "site-tag-warning",
     tagPrefix: "informal_lemma",
   },
   semiformal: {
     label: "Semiformal Result",
-    className: "bg-(--accent-tint) text-accent border-accent/20",
+    className: "site-tag-accent",
     tagPrefix: "semiformal_result",
   },
   sorryful: {
     label: "Sorryful Result",
-    className: "bg-purple-500/10 text-purple-700 border-purple-500/20 dark:text-purple-400",
+    className: "site-tag-danger",
     tagPrefix: "sorryful result",
   },
   todo: {
     label: "TODO Item",
-    className: "bg-teal-500/10 text-teal-700 border-teal-500/20 dark:text-teal-400",
+    className: "site-tag-neutral",
     tagPrefix: "TODO",
   },
   githubIssue: {
     label: "GitHub Issue",
-    className: "bg-green-500/10 text-green-700 border-green-500/20 dark:text-green-400",
+    className: "site-tag-success",
   },
 };
 

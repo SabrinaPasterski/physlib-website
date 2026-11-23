@@ -15,6 +15,12 @@ export type FindTask = {
   todoItem?: TodoItem;
   labels?: string[];
   assignees?: string[];
+  nextStep?: {
+    action: "volunteer_on_github";
+    discussionUrl: string;
+    guideUrl: string;
+    agentBrief: string;
+  };
   subfield?: string;
   /** Set when the issue body says an LLM filed it and no person has checked it. */
   unreviewed?: boolean;
@@ -190,18 +196,33 @@ function issueTask(repository: string, issue: GitHubIssue, linkedTodo?: TodoItem
   const labels = issue.labels.map(({ name }) => name);
   const subfield = apiMapSubfield(issue.body);
   const { text, unreviewed } = issueBody(issue.body);
+  const href = `https://github.com/${repository}/issues/${issue.number}`;
+  const guideUrl = repository === libraryRepository
+    ? `${site.url}/getting-started#first-contribution`
+    : `${site.websiteRepo}/tree/main/web2`;
   return {
     id: repository === libraryRepository ? `issue-${issue.number}` : `website-issue-${issue.number}`,
     repository,
     title: issue.title,
     detail: linkedTodo?.file || textPreview(text, 220) || labels.join(", "),
-    href: `https://github.com/${repository}/issues/${issue.number}`,
+    href,
     kinds: issueKinds(issue.title, labels, Boolean(linkedTodo)),
     source: `GitHub #${issue.number}`,
     keywords: [labels.join(" "), linkedTodo && todoKeywords(linkedTodo)].filter(Boolean).join(" "),
     todoItem: linkedTodo,
     labels,
     assignees: issue.assignees.map(({ login }) => login),
+    nextStep: issue.assignees.length === 0 ? {
+      action: "volunteer_on_github",
+      discussionUrl: href,
+      guideUrl,
+      agentBrief: [
+        `${repository}#${issue.number} — ${issue.title}`,
+        href,
+        "Check the current assignees and recent comments. If this work is available, help me draft a comment describing the part I would like to take on.",
+        `Contribution guide: ${guideUrl}`,
+      ].join("\n\n"),
+    } : undefined,
     subfield,
     unreviewed: unreviewed || undefined,
   };

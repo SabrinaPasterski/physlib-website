@@ -48,6 +48,7 @@ function taskRecord(task: FindTask) {
     url: task.href,
     labels: task.labels,
     assignees: task.assignees,
+    nextStep: task.nextStep,
     unreviewed: task.unreviewed,
     todo: item ? {
       tag: item.tag,
