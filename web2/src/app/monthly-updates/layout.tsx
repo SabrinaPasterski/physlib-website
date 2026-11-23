@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { MobileMonthArchive } from "@/components/monthly-updates/month-sidebar";
+import { getArchiveBounds } from "@/lib/monthly-updates-months";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -7,7 +9,7 @@ export const metadata: Metadata = {
     "Auto-generated monthly reports of new definitions, theorems, and lemmas added to Physlib.",
 };
 
-export default function MonthlyUpdatesLayout({
+export default async function MonthlyUpdatesLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -40,6 +42,7 @@ export default function MonthlyUpdatesLayout({
         .
       </p>
 
+      <MobileMonthArchive bounds={await getArchiveBounds()} />
       {children}
     </div>
   );

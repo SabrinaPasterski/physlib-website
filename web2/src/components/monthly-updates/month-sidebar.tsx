@@ -45,66 +45,88 @@ function earlierPdfReports(a: string | undefined, b: string | undefined) {
 }
 
 export function MonthSidebar() {
-  const months = monthRange(useContext(ArchiveContext));
+  const bounds = useContext(ArchiveContext);
+  return (
+    <aside className="hidden w-52 shrink-0 pt-16 lg:block">
+      <nav aria-label="Monthly report archive" className="py-8 pr-3 pl-6">
+        <ReportLinks bounds={bounds} />
+      </nav>
+    </aside>
+  );
+}
+
+export function MobileMonthArchive({ bounds }: { bounds: ArchiveBounds | null }) {
+  const pathname = usePathname();
+  if (!bounds) return null;
+  return (
+    <details key={pathname} className="mb-6 rounded-lg border border-border px-3 lg:hidden">
+      <summary className="cursor-pointer py-2 text-sm font-medium">Browse reports</summary>
+      <nav aria-label="Monthly report archive" className="border-t border-border py-3">
+        <ReportLinks bounds={bounds} />
+      </nav>
+    </details>
+  );
+}
+
+function ReportLinks({ bounds }: { bounds: ArchiveBounds | null }) {
+  const months = monthRange(bounds);
   const years = Array.from(new Set(months.map((m) => m.year)));
   const earlier = earlierPdfReports(months[months.length - 1]?.slug ?? months[0]?.slug, months[0]?.slug);
   const pathname = usePathname();
   const activeSlug = pathname.split("/").pop();
 
   return (
-    <aside className="hidden w-52 shrink-0 lg:block pt-16">
-      <nav className="sticky top-16 max-h-[calc(100vh-4rem)] overflow-y-auto py-8 pr-3 pl-6">
-        {years.map((year) => (
-          <div key={year} className="mb-6 last:mb-0">
-            <p className="site-nav-heading">
-              {year}
-            </p>
-            <ul className="flex flex-col">
-              {months
-                .filter((m) => m.year === year)
-                .map((m) => {
-                  const isActive = m.slug === activeSlug;
-                  return (
-                    <li key={m.slug}>
-                      <Link
-                        href={`/monthly-updates/${m.slug}`}
-                        aria-current={isActive ? "page" : undefined}
-                        className="site-nav-link site-sidebar-link px-2"
-                      >
-                        {m.monthName}
-                      </Link>
-                    </li>
-                  );
-                })}
-            </ul>
-          </div>
-        ))}
+    <>
+      {years.map((year) => (
+        <div key={year} className="mb-6 last:mb-0">
+          <p className="site-nav-heading">
+            {year}
+          </p>
+          <ul className="grid grid-cols-2 lg:flex lg:flex-col">
+            {months
+              .filter((m) => m.year === year)
+              .map((m) => {
+                const isActive = m.slug === activeSlug;
+                return (
+                  <li key={m.slug}>
+                    <Link
+                      href={`/monthly-updates/${m.slug}`}
+                      aria-current={isActive ? "page" : undefined}
+                      className="site-nav-link site-sidebar-link px-2"
+                    >
+                      {m.monthName}
+                    </Link>
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+      ))}
 
-        {earlier.length > 0 && (
-          <details className="group mt-8 border-t border-border/60 pt-4">
-            <summary className="site-nav-heading mb-0 flex cursor-pointer list-none items-center justify-between rounded-(--radius) py-1 hover:text-foreground [&::-webkit-details-marker]:hidden">
-              Earlier reports (PDF)
-              <svg aria-hidden="true" className="size-3 transition-transform duration-150 group-open:rotate-90" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
-            </summary>
-            <ul className="mt-2 flex flex-col">
-              {earlier.map((m) => (
-                <li key={m.slug}>
-                  <a
-                    href={`/monthly-updates/${m.slug}.pdf`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="site-nav-link site-sidebar-link px-2"
-                  >
-                    {m.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
-      </nav>
-    </aside>
+      {earlier.length > 0 && (
+        <details className="group mt-8 border-t border-border/60 pt-4">
+          <summary className="site-nav-heading mb-0 flex cursor-pointer list-none items-center justify-between gap-1 rounded-(--radius) py-1 hover:text-foreground [&::-webkit-details-marker]:hidden">
+            <span className="whitespace-nowrap">Earlier reports (PDF)</span>
+            <svg aria-hidden="true" className="size-3 shrink-0 transition-transform duration-150 group-open:rotate-90" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </summary>
+          <ul className="mt-2 grid grid-cols-2 gap-x-1">
+            {earlier.map((m) => (
+              <li key={m.slug}>
+                <a
+                  href={`/monthly-updates/${m.slug}.pdf`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="site-nav-link site-sidebar-link whitespace-nowrap px-2"
+                >
+                  {m.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+    </>
   );
 }
