@@ -1,19 +1,14 @@
 on:
-    schedule:
-        - cron: '0 2,14 * * *'  # Run twice a day (public repo, no minutes limit)
-    workflow_dispatch:       # Allows manual triggering from the GitHub Actions tab
+  push:
+    branches: [codex/verify-physlib-alpha-docs]
 
-  
-name: Archive site files and documentation from Physlib
-  
+name: Verify PhyslibAlpha Docs
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
   
 jobs:
   build_project:
-      if: github.repository == 'kernel-science/physlib-website'
       runs-on: ubuntu-24.04  # since ubuntu-latest became 26.04, doc-gen4 fails with ENOMEM; cause not yet known
       name: Build project
       steps:
@@ -21,6 +16,7 @@ jobs:
           uses: actions/checkout@v4
           with:
             repository: leanprover-community/physlib
+            ref: 1fa65789169f5981d12137dd6e930afe0836ffe2
             fetch-depth: 0
   
         - name: Install Graphviz
@@ -181,13 +177,3 @@ jobs:
             path: doc-artifact/
             retention-days: 90
 
-        - name: Trigger Vercel Deploy Hook
-          env:
-            VERCEL_DEPLOY_HOOK_URL: ${{ secrets.VERCEL_DEPLOY_HOOK_URL }}
-          run: |
-            if [ -n "$VERCEL_DEPLOY_HOOK_URL" ]; then
-              curl -X POST "$VERCEL_DEPLOY_HOOK_URL"
-              echo "Vercel deploy hook triggered."
-            else
-              echo "VERCEL_DEPLOY_HOOK_URL is not set. Skipping Vercel trigger."
-            fi
