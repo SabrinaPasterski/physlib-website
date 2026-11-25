@@ -1,0 +1,110 @@
+.activity {
+  /* The Globe's tile colours, so each chip points at the part of the Globe it changes. */
+  --act-physlib: #245e9e;
+  --act-alpha: #a64d11;
+  width: min(100%, 33rem);
+  /* The bottom margin keeps the carousel's 1 | 2 pager clear of the last row. */
+  margin: 1rem auto 2.5rem;
+  padding-top: .85rem;
+  border-top: 1px solid var(--border);
+}
+:global([data-theme="dark"]) .activity { --act-physlib: #80b9fa; --act-alpha: #f6ab6a; }
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .45rem;
+  color: var(--muted);
+  font-weight: inherit;
+}
+.people { margin-left: auto; font-size: .75rem; font-variant-numeric: tabular-nums; }
+
+.pulse {
+  position: relative;
+  width: .45rem;
+  height: .45rem;
+  border-radius: 999px;
+  background: #2f9e5b;
+}
+.pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  animation: pulse 2s ease-out infinite;
+}
+@keyframes pulse {
+  from { transform: scale(1); opacity: .6; }
+  to { transform: scale(3); opacity: 0; }
+}
+
+.list { display: grid; gap: .15rem; margin: 0; padding: 0; list-style: none; }
+.list li { min-width: 0; }
+.placeholder {
+  height: 1.75rem;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  min-width: 0;
+  height: 1.75rem;
+  padding: 0 .35rem;
+  border-radius: var(--radius);
+  color: var(--foreground);
+  font-size: .8125rem;
+  letter-spacing: -.01em;
+  text-decoration: none;
+  transition: background-color .15s;
+}
+.row:hover { background: color-mix(in srgb, var(--foreground) 6%, transparent); }
+.row:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+
+.avatar { flex: none; width: 1.25rem; height: 1.25rem; border-radius: 999px; }
+.who { flex: none; font-weight: 550; }
+.area {
+  flex: none;
+  max-width: 9rem;
+  overflow: hidden;
+  padding: .05rem .4rem;
+  border-radius: 999px;
+  font-size: .6875rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--act-physlib);
+  background: color-mix(in srgb, var(--act-physlib) 12%, transparent);
+}
+.area[data-library="PhyslibAlpha"] {
+  color: var(--act-alpha);
+  background: color-mix(in srgb, var(--act-alpha) 12%, transparent);
+}
+.what {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.status { flex: none; color: var(--muted); font-size: .75rem; font-variant-numeric: tabular-nums; }
+.status[data-status="merged"] { color: #2f9e5b; }
+:global([data-theme="dark"]) .status[data-status="merged"] { color: #6fd39a; }
+
+.enter { animation: enter .5s ease-out; }
+@keyframes enter {
+  from { opacity: 0; transform: translateY(-.35rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@container (max-width: 26rem) {
+  .what { display: none; }
+  .area { flex: 0 1 auto; margin-right: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pulse::after, .enter { animation: none; }
+}

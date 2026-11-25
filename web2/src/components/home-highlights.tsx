@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { HomeActivity } from "./home-activity";
 import styles from "./home-highlights.module.css";
 
 const headings = ["Ways to Contribute", "Explore Formalized Physics"];
@@ -54,12 +55,15 @@ export function HomeHighlights({ children }: { children: ReactNode }) {
           <div key={title} className={styles.slide} inert={slide !== index}
             aria-hidden={slide !== index} role="group" aria-roledescription="slide" aria-label={title}>
             {index === 0 ? children : (
-              <Link href="/globe"
-                prefetch={false} className={styles.roadmapLink} aria-label="Open the Physlib Globe">
-                <span aria-hidden="true" className={styles.preview}/>
-                <h2 className="label-mono text-muted mt-3">Explore Formalized Physics</h2>
-                <span className="mt-0.5 block text-sm text-accent">Open the Physlib Globe <span aria-hidden="true">→</span></span>
-              </Link>
+              <>
+                <Link href="/globe"
+                  prefetch={false} className={styles.roadmapLink} aria-label="Open the Physlib Globe">
+                  <span aria-hidden="true" className={styles.preview}/>
+                  <h2 className="label-mono text-muted mt-3">Explore Formalized Physics</h2>
+                  <span className="mt-0.5 block text-sm text-accent">Open the Physlib Globe <span aria-hidden="true">→</span></span>
+                </Link>
+                <HomeActivity paused={slide !== 1} />
+              </>
             )}
           </div>
         ))}
